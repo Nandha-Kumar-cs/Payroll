@@ -13,21 +13,27 @@ return new class extends Migration {
     public function up()
     {
 
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('employee', function (Blueprint $table) {
             $table->id();
             $table->string('employee_code')->unique();
             $table->string('full_name');
             $table->date('dob')->nullable();
             $table->enum('gender', ['M', 'F', 'O'])->nullable();
-            $table->integer('phone')->nullable();
-            $table->string('email')->nullable();
+            $table->integer('phone');
+            $table->string('email');
             $table->date('joining_date')->nullable();
             $table->unsignedBigInteger('department_id')->nullable();
             $table->string('status')->nullable();
             $table->unsignedBigInteger('reporting_manager_id')->nullable();
             $table->date('probation_end_date')->nullable();
-            $table->unsignedBigInteger('designation_id');
+            $table->unsignedBigInteger('designation_id')->nullable();
             $table->timestamps();
+
+
+            // foreign key constraint 
+            $table->foreignId('department_id')->nullable()->constrained();
+            $table->foreign('designation_id')->references('id')->on('designations');
+
         });
 
     }

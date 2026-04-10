@@ -13,12 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('joining_letter', function (Blueprint $table) {
+        Schema::create('employee_document', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('employee_id');
-        $table->date('joining_date');
-        $table->date('issued_date')->nullable();
+        $table->unsignedBigInteger('document_type_id');
+        $table->string('file_path');
+        $table->dateTime('uploaded_at')->default(now());
         $table->timestamps();
+
+        // references 
+        $table->foreign('document_type_id')->references('id')->on('document_type');
         });
     }
 
@@ -29,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('joining_letter');
+        Schema::dropIfExists('employee_document');
     }
 };

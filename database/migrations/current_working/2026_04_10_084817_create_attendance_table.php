@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('attendance', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('employee_id');
+            $table->date('date');
+            $table->time('check_in')->nullable();
+            $table->time('check_out')->nullable();
+            $table->enum('status', ['present', 'absent', 'late'])->nullable();
+            $table->enum('source', ['manual', 'biometric'])->default('manual');
+            $table->unsignedBigInteger('Total_days_present')->nullable();
+            $table->timestamps();
+
+            // foreign key constraints
+            $table->foreign('employee_id')->references('id')->on('employee')->cascadeOnDelete();
+
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('attendance');
+    }
+};

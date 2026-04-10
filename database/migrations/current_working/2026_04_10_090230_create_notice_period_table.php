@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('experience_letter', function (Blueprint $table) {
+        Schema::create('notice_period', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('employee_id');
-        $table->date('issued_date')->nullable();
-        $table->string('file_path')->nullable();
-        $table->unsignedBigInteger('issued_by')->nullable();
+        $table->integer('notice_days');
+        $table->date('start_date')->nullable();
+        $table->date('end_date')->nullable();
+        $table->decimal('fnf_amount')->nullable();
         $table->timestamps();
+        $table->foreign('employee_id')->references('employee')->on('employee');
         });
     }
 
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('experience_letter');
+        Schema::dropIfExists('notice_period');
     }
 };

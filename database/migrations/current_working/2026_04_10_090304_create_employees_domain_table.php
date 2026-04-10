@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('attendance', function (Blueprint $table) {
+        Schema::create('employees_domain', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('employee_id');
-        $table->date('date');
-        $table->time('check_in')->nullable();
-        $table->time('check_out')->nullable();
-        $table->enum('status', ['present', 'absent', 'late'])->nullable();
-        $table->enum('source', ['manual', 'biometric'])->default('manual');
+        $table->integer('skill')->nullable();
+        $table->string('domain')->nullable();
+        $table->enum('proficiency_level', ['beginner', 'intermediate', 'expert'])->nullable();
         $table->timestamps();
+        $table->foreign('employee_id')->references('employee')->on('employee');
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendance');
+        Schema::dropIfExists('employees_domain');
     }
 };

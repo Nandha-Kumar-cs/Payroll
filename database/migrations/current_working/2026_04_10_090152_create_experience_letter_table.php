@@ -13,11 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-    Schema::create('departments', function (Blueprint $table) {
+        Schema::create('experience_letter', function (Blueprint $table) {
         $table->id();
-        $table->string('name');
-        $table->unsignedBigInteger('head_employee_id')->nullable();
+        $table->unsignedBigInteger('employee_id');
+        $table->string('file_path');
+        $table->date('issued_date')->nullable();
+        $table->string('file_path')->nullable();
+        $table->unsignedBigInteger('issued_by')->nullable();
         $table->timestamps();
+        $table->foreign('employee_id')->references('employee')->on('employee');
         });
     }
 
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('experience_letter');
     }
 };

@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('document_verification', function (Blueprint $table) {
+        Schema::create('joining_letter', function (Blueprint $table) {
         $table->id();
-        $table->unsignedBigInteger('employee_document_id');
-        $table->unsignedBigInteger('verified_by')->nullable();
-        $table->dateTime('verified_at')->nullable();
-        $table->enum('status', ['pending', 'verified', 'rejected'])->default('pending');
         $table->unsignedBigInteger('employee_id');
+        $table->date('joining_date');
+        $table->string('file_path');
+        $table->date('issued_date')->nullable();
         $table->timestamps();
+        $table->foreign('employee_id')->references('employee')->on('employee');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('document_verification');
+        Schema::dropIfExists('joining_letter');
     }
 };
