@@ -16,7 +16,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="offer-letter-table">
                     @forelse ($letters as $row)
                         <tr>
                             <td>{{ $row->issued_date?->format('Y-m-d') }}</td>
@@ -29,7 +29,10 @@
                                     —
                                 @endif
                             </td>
-                            <td><a class="doc-link" href="{{ route('documents.offer-letters.preview', $row) }}">Open</a></td>
+                            <td>
+                                <a class="offer-letter-icons" href="{{ route('documents.offer-letters.preview', $row) }}"><i class="fa-solid fa-file-arrow-up "></i></a>
+                                <a class="offer-letter-icons" href="{{ route('documents.offer-letters.delete' , $row['id']) }}"><i class="fa-solid fa-trash"></i></a>
+                            </td>
                         </tr>
                     @empty
                         <tr>

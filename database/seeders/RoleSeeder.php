@@ -14,17 +14,16 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $exists = DB::table('roles')->where('role_id', config('payroll.default_role_id'))->exists();
+        $exists = DB::table('departments')->where('id', config('payroll.default_role_id'))->exists();
 
         if ($exists) {
             return;
         }
 
-        DB::table('roles')->insert([
-            'role_id' => config('payroll.default_role_id'),
-            'role_name' => 'Employee',
-            'description' => 'Default self-service employee role',
-            'permission_id' => 0,
+        DB::table('departments')->insert([
+            'id' => config('payroll.default_role_id'),
+            'name' => 'Employee',
+            'head_employee_id' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -8,6 +8,8 @@ use App\Models\OfferLetter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\Department ;
+use App\Models\Designation;
 
 class OfferLetterController extends Controller
 {
@@ -31,7 +33,8 @@ class OfferLetterController extends Controller
             ->orderBy('full_name')
             ->get();
 
-        return view('documents.offer-letters.create', compact('employees'));
+        $designations = Designation::all();
+        return view('documents.offer-letters.create', compact('employees' , 'designations'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -40,7 +43,6 @@ class OfferLetterController extends Controller
             'employee_id' => ['required', 'exists:employee,id'],
             'offered_salary' => ['nullable', 'numeric', 'min:0'],
             'issued_date' => ['required', 'date'],
-            'role_title' => ['nullable', 'string', 'max:255'],
             'compensation_line' => ['nullable', 'string', 'max:500'],
             'conveyance' => ['nullable', 'numeric', 'min:0'],
             'vehicle_maintenance' => ['nullable', 'numeric', 'min:0'],
@@ -49,6 +51,7 @@ class OfferLetterController extends Controller
             'signatory_name' => ['nullable', 'string', 'max:120'],
         ]);
 
+      
         $letter = OfferLetter::query()->create([
             'employee_id' => $data['employee_id'],
             'offered_salary' => $data['offered_salary'] ?? null,
@@ -58,7 +61,6 @@ class OfferLetterController extends Controller
         ]);
 
         $request->session()->put(self::SESSION_PREFIX.$letter->id, [
-            'role_title' => $data['role_title'] ?? null,
             'compensation_line' => $data['compensation_line'] ?? null,
             'conveyance' => $data['conveyance'] ?? null,
             'vehicle_maintenance' => $data['vehicle_maintenance'] ?? null,
@@ -141,5 +143,11 @@ class OfferLetterController extends Controller
                 'total_ctc' => $totalCtc,
             ],
         ]);
+    }
+
+
+    public function delete($id){
+        OfferLetter::find($id)?->delete();
+        return back();
     }
 }

@@ -6,13 +6,15 @@
     --doc-accent: #1d4ed8;
     --doc-serif: "Georgia", "Times New Roman", serif;
     --doc-sans: "DM Sans", system-ui, sans-serif;
+    --doc-calibra : "Calibri";
+    --doc-title-size : "5%";
 }
 
 .doc-print-body {
     margin: 0;
     background: #f3f4f6;
     color: var(--doc-ink);
-    font-family: var(--doc-sans);
+    font-family: var(--doc-calibra);
 }
 
 .doc-print-toolbar {
@@ -82,6 +84,7 @@
     margin-bottom: 1.5rem;
     display: flex;
     justify-content: space-between;
+    font-size: var(--doc-title-size) !important;
 }
 
 .doc-letterhead__logo {
@@ -92,7 +95,7 @@
 
 .doc-letterhead__name {
     margin: 0;
-    font-family: var(--doc-serif);
+    font-family: var(--doc-calibra);
     font-size: 1.35rem;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -107,7 +110,7 @@
 
 .doc-title {
     margin: 0 0 1.25rem;
-    font-family: var(--doc-serif);
+    font-family: var(--doc-calibra);
     font-size: 1.125rem;
     font-weight: 700;
     text-align: center;
@@ -116,7 +119,7 @@
 }
 
 .doc-body {
-    font-family: var(--doc-serif);
+    font-family: var(--doc-calibra);
     font-size: 11.5pt;
     line-height: 1.65;
 }
@@ -202,4 +205,21 @@
         size: A4;
         margin: 12mm;
     }
+}
+#terms_conditions tr td:first-child , #terms_conditions tr td:nth-child(2)  {
+    vertical-align: text-top;
+}
+.emp_signature {
+    display: flex;
+    justify-content: space-between;
+}
+.confirm_date_of_joining {
+    text-align: center;
+}
+.doc_footer_line{
+    margin-top: 10px;
+    border-top: 1px solid grey;
+}
+.page-break{
+    page-break-before:always ;
 }

@@ -2,65 +2,76 @@
     $role = $roleTitle ?? $employee?->designation?->title;
 @endphp
 
-<x-layouts.document-print
-    pageTitle="Offer letter"
-    :backUrl="route('documents.offer-letters.index')"
->
+<x-layouts.document-print pageTitle="Offer letter" :backUrl="route('documents.offer-letters.index')">
     @include('documents.partials.letterhead', ['company' => $company])
 
     <div class="doc-body">
         <p class="doc-meta">
-            {{ $letter->issued_date?->format('F j, Y') }}<br>
+            {{ $letter->issued_date?->format('j-F-Y') }}<br>
         </p>
 
-        <p>Dear {{ $employee?->full_name ?? 'Candidate' }},</p>
+        <p>Dear {{ $employee?->gender == 'M' ? 'Mr.' : 'Mrs.'}} {{ Str::title($employee?->full_name) ?? 'Candidate' }}</p>
 
         <p>
-            With reference to your application and the interviews you had with <strong>{{ $company['name'] }} </strong>, 
+            With reference to your application and the interviews you had with <strong>{{ $company['name'] }} </strong>,
             we are pleased to offer you employment in our company on the following terms and conditions.
-            
 
-
-
-            @if ($role)
-                of <strong>{{ $role }}</strong>
-            @else
-                discussed with you
-            @endif
-            @if ($employee?->department?->name)
-                with <strong>{{ $company['name'] ?? 'the organization' }}</strong>, aligned to the
-                <strong>{{ $employee->department->name }}</strong> function.yyyyyy
-            @else
-                with <strong>{{ $company['name'] ?? 'the organization' }}</strong>.
-            @endif
-        </p>
-
-        @if ($letter->offered_salary !== null)
-            <p>
-                Your proposed annual cost-to-company / gross compensation is
-                <strong>{{ number_format((float) $letter->offered_salary, 2) }}</strong>
-                (figures subject to payroll policy and statutory deductions at the time of payment).
-            </p>
-        @endif
-
-        <p>
-            This offer is contingent upon successful completion of any background checks and compliance requirements
-            applicable to your role. Your expected date of joining may be coordinated with HR; please treat this letter
-            as confidential until formal onboarding steps are completed.
-        </p>
-
-        <p>
-            We look forward to welcoming you to the team. Kindly confirm acceptance by replying to this communication
-            or signing the duplicate copy where applicable.
-        </p>
-
-        <p>Sincerely,</p>
-
-        <div class="doc-signature">
-            <div class="doc-signature__line"></div>
-            <p class="doc-signature__name">Authorized Signatory</p>
-            <p class="doc-signature__role">Human Resources</p>
-            <p class="doc-signature__role">{{ $company['name'] ?? '' }}</p>
-        </div>
+        <table id="terms_conditions">
+            <tr>
+                <td>1.Designation</td>
+                <td>:</td>
+                <td>{{ $employee?->designation?->title }}</td>
+            </tr>
+            <tr>
+                <td>2.Department</td>
+                <td>:</td>
+                <td>{{ $employee?->department?->name }}</td>
+            </tr>
+            <tr>
+                <td>3.Date Of Joining</td>
+                <td>:</td>
+                <td>{{ $employee?->joining_date->format('d-m-y') }} ( {{ $employee?->joining_date->format('l') }})</td>
+            </tr>
+            <tr>
+                <td>4.Compensation</td>
+                <td>:</td>
+                <td>{{ $employee?->joining_date }}</td>
+            </tr>
+            <tr>
+                <td>5:Probation</td>
+                <td>:</td>
+                <td>First six months from the date of joining will be treated as probation period.
+                    During this period, no increments will apply</td>
+            </tr>
+            <tr>
+                <td>6.Confirmation</td>
+                <td>:</td>
+                <td>After completion of six months, we will evaluate your performance and decide whether to retain your
+                    services. Unless the employment is confirmed
+                    in writing at the end of the probation period, it should be considered terminated. </td>
+            </tr>
+            <tr>
+                <td>7.House Of work</td>
+                <td>:</td>
+                <td>9.00am to 6.15pm (with weekly off as per company policy)</td>
+            </tr>
+            <tr>
+                <td>8.Notice Of termination</td>
+                <td>:</td>
+                <td>During the probation period, your service can be terminated by either side by giving two day’s
+                    written notice. Upon confirmation, one month’s written notice is required from either side. If you
+                    are already on an assignment and if your presence in the assignment is necessary as assessed by the
+                    management, the management
+                    reserves the right to require you to work till the assignment is complete.</td>
+            </tr>
+            <tr>
+                <td>9.Leave Policy</td>
+                <td>:</td>
+                <td>As per the rules of the company, you can avail 6 days casual & 6 days sick leave per year.</td>
+            </tr>
+        </table>
+        <div class="page-break"></div>
     </div>
+
+    @include('documents.partials.letterfooter' , ['company' => $company])
 </x-layouts.document-print>

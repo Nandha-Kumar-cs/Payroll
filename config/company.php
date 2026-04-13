@@ -3,7 +3,8 @@
 return [
 
     'name' => env('COMPANY_NAME', 'Magneto Dynamics'),
-
+    
+    'director' => env('DIRECTOR' , 'Suresh Kumar') ,
     /*
     | Short brand for letterhead (e.g. logo strip text)
     */

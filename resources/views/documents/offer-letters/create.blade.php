@@ -34,13 +34,6 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="role_title">Designation (optional override)</label>
-                    <input id="role_title" name="role_title" type="text" value="{{ old('role_title') }}" placeholder="e.g. Manager - Production">
-                    @error('role_title')
-                        <p class="doc-form-error">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
                     <label for="compensation_line">Compensation line (optional)</label>
                     <input id="compensation_line" name="compensation_line" type="text" value="{{ old('compensation_line') }}" placeholder="e.g. Rs 1036 per month + Retirals">
                     @error('compensation_line')
