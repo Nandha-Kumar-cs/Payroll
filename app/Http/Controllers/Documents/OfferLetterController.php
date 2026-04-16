@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Department ;
 use App\Models\Designation;
+use App\Models\settings\Allowance ;
 
 class OfferLetterController extends Controller
 {
@@ -18,11 +19,10 @@ class OfferLetterController extends Controller
     public function index(): View
     {
         $letters = OfferLetter::query()
-            ->with(['employee.department', 'employee.designation'])
+            ->with(['employee.department', 'employee.designation' , 'employee.salaryStructures'])
             ->orderByDesc('issued_date')
             ->orderByDesc('id')
             ->paginate(15);
-
         return view('documents.offer-letters.index', compact('letters'));
     }
 
@@ -34,7 +34,13 @@ class OfferLetterController extends Controller
             ->get();
 
         $designations = Designation::all();
-        return view('documents.offer-letters.create', compact('employees' , 'designations'));
+        $allowance = Allowance::all()->toArray() ;
+        $allowance_mapings = [] ; 
+        foreach ($allowance as $row) {
+            $allowance_mapings[$row['type']] =$row['value'];
+        } 
+
+        return view('documents.offer-letters.create', compact('employees' , 'designations' , 'allowance_mapings'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -76,46 +82,40 @@ class OfferLetterController extends Controller
 
     public function preview(OfferLetter $offerLetter): View
     {
+        $allowance = Allowance::all()->toArray() ;
+
+        $allowance_mapings = [] ; 
+
+        foreach ($allowance as $row) {
+            $allowance_mapings[$row['type']] =$row['value'];
+        } 
+   
+
         $offerLetter->load(['employee.department', 'employee.designation', 'employee.latestSalaryStructure']);
-
-        $extra = session(self::SESSION_PREFIX.$offerLetter->id, []);
         $employee = $offerLetter->employee;
-        $salary = $employee?->latestSalaryStructure;
+        $ctc = $employee?->latestSalaryStructure?->ctc ;
 
-        $roleTitle = $extra['role_title'] ?? null;
-        $compensationLine = $extra['compensation_line'] ?? null;
-        $signatoryName = $extra['signatory_name'] ?? config('company.signatory_name');
+        $conveyance_string = str_replace('ctc' , $ctc , $allowance_mapings['conveyance'] ); 
+        $conveyance = eval("return $conveyance_string;");
 
-        $basic = (float) ($salary?->basic ?? 0);
-        $hra = (float) ($salary?->hra ?? 0);
-        $conveyance = (float) ($extra['conveyance'] ?? 0);
-        $vehicleMaint = (float) ($extra['vehicle_maintenance'] ?? 0);
-        $prodIncentive = (float) ($extra['production_incentive'] ?? 0);
+        $vehicle_maintenance_string = str_replace('ctc' , $ctc , $allowance_mapings['vehicle_maintenance'] ); 
+        $vehicle_maintenance = eval("return $vehicle_maintenance_string;");
 
-        $sumComponents = $basic + $hra + $conveyance + $vehicleMaint + $prodIncentive;
-        $grossFromSalary = $salary ? (float) $salary->gross : 0.0;
-        // Prefer sum of annex line items when present; otherwise use gross from salary_structure
-        $grossPay = $sumComponents > 0
-            ? round($sumComponents, 2)
-            : ($grossFromSalary > 0 ? $grossFromSalary : 0.0);
+        $production_incentive_string = str_replace('ctc' , $ctc , $allowance_mapings['production_incentive'] ); 
+        $production_incentive = eval("return $production_incentive_string;");
 
-        $pfEsi = isset($extra['pf_esi']) && $extra['pf_esi'] !== '' && $extra['pf_esi'] !== null
-            ? (float) $extra['pf_esi']
-            : null;
+        $pf_esi_string = str_replace('ctc' , $ctc , $allowance_mapings['pf_esi'] ); 
+        $pf_esi = eval("return $pf_esi_string;");
 
-        $ctc = $salary && $salary->ctc !== null ? (float) $salary->ctc : null;
-        if ($pfEsi === null && $ctc !== null && $ctc >= $grossPay) {
-            $pfEsi = round($ctc - $grossPay, 2);
-        }
-        if ($pfEsi === null) {
-            $pfEsi = 0.0;
-        }
+        $basic_stirng =  str_replace('ctc' , $ctc , $allowance_mapings['Basic'] ); 
+        $basic = eval("return $basic_stirng;");
 
-        $totalCtc = $ctc !== null ? $ctc : round($grossPay + $pfEsi, 2);
+        $hra_stirng =  str_replace('ctc' , $ctc , $allowance_mapings['Hra'] ); 
+        $hra = eval("return $hra_stirng;");
+        $grossPay = $basic + $hra  + $pf_esi + $vehicle_maintenance + $production_incentive  ;
+        
 
-        if ($compensationLine === null && $offerLetter->offered_salary !== null) {
-            $compensationLine = 'Rs '.number_format((float) $offerLetter->offered_salary, 0).' per month + Retirals';
-        }
+        
 
         $footerLine = config('company.footer_address')
             ?? trim(implode(', ', array_filter([
@@ -127,20 +127,17 @@ class OfferLetterController extends Controller
         return view('documents.print.offer-letter', [
             'letter' => $offerLetter,
             'employee' => $employee,
-            'roleTitle' => $roleTitle,
             'company' => config('company'),
-            'compensationLine' => $compensationLine,
-            'signatoryName' => $signatoryName,
             'footerLine' => $footerLine,
             'annex' => [
                 'basic' => $basic,
                 'hra' => $hra,
                 'conveyance' => $conveyance,
-                'vehicle_maintenance' => $vehicleMaint,
-                'production_incentive' => $prodIncentive,
+                'vehicle_maintenance' => $vehicle_maintenance,
+                'production_incentive' => $production_incentive,
                 'gross_pay' => $grossPay,
-                'pf_esi' => $pfEsi,
-                'total_ctc' => $totalCtc,
+                'pf_esi' => $pf_esi,
+                'total_ctc' => $ctc,
             ],
         ]);
     }

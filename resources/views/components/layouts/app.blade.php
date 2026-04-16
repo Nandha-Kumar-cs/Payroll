@@ -40,5 +40,16 @@
             </main>
         </div>
     </div>
+    <script>
+     document.addEventListener('DOMContentLoaded' , function(e){
+        const flash = document.querySelector('.app-flash') ; 
+        if(flash){
+            setTimeout(function(){
+               flash.style.display = 'none' ; 
+            } , 1000);
+        } 
+     });
+    </script>
+    @stack('external_scripts')
 </body>
 </html>

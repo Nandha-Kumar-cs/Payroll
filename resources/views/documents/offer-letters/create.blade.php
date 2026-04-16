@@ -3,7 +3,6 @@
         <p>Create an offer letter, then preview and print. Salary annex pulls from the employee’s latest salary structure; optional lines override or add components.</p>
         <a class="doc-btn doc-btn--ghost" href="{{ route('documents.offer-letters.index') }}">Back</a>
     </div>
-
     <section class="app-panel">
         <form class="doc-form doc-form--wide" method="POST" action="{{ route('documents.offer-letters.store') }}">
             @csrf
@@ -34,15 +33,15 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="compensation_line">Compensation line (optional)</label>
-                    <input id="compensation_line" name="compensation_line" type="text" value="{{ old('compensation_line') }}" placeholder="e.g. Rs 1036 per month + Retirals">
+                    <label for="compensation_line">Compensation line</label>
+                    <input id="compensation_line" name="compensation_line" type="text" value="{{ old('compensation_line') }}" placeholder="e.g. Rs 1036 per month + Retirals" readonly>
                     @error('compensation_line')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
                     <label for="offered_salary">Monthly amount (optional fallback)</label>
-                    <input id="offered_salary" name="offered_salary" type="number" step="0.01" min="0" value="{{ old('offered_salary') }}">
+                    <input id="offered_salary" name="offered_salary" type="number" step="0.01" min="0" value="{{ old('offered_salary') }}" required>
                     <p class="doc-form__hint">Used if compensation line is empty.</p>
                     @error('offered_salary')
                         <p class="doc-form-error">{{ $message }}</p>
@@ -62,28 +61,28 @@
             <div class="doc-form-grid">
                 <div>
                     <label for="conveyance">Conveyance</label>
-                    <input id="conveyance" name="conveyance" type="number" step="0.01" min="0" value="{{ old('conveyance') }}">
+                    <input id="conveyance" name="conveyance" type="number" step="0.01" min="0" value="{{ old('conveyance') }}" readonly>
                     @error('conveyance')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
                     <label for="vehicle_maintenance">Vehicle maintenance</label>
-                    <input id="vehicle_maintenance" name="vehicle_maintenance" type="number" step="0.01" min="0" value="{{ old('vehicle_maintenance') }}">
+                    <input id="vehicle_maintenance" name="vehicle_maintenance" type="number" step="0.01" min="0" value="{{ old('vehicle_maintenance') }}" readonly>
                     @error('vehicle_maintenance')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
                     <label for="production_incentive">Production incentive</label>
-                    <input id="production_incentive" name="production_incentive" type="number" step="0.01" min="0" value="{{ old('production_incentive') }}">
+                    <input id="production_incentive" name="production_incentive" type="number" step="0.01" min="0" value="{{ old('production_incentive') }}" readonly>
                     @error('production_incentive')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
                     <label for="pf_esi">PF + ESI (optional)</label>
-                    <input id="pf_esi" name="pf_esi" type="number" step="0.01" min="0" value="{{ old('pf_esi') }}">
+                    <input id="pf_esi" name="pf_esi" type="number" step="0.01" min="0" value="{{ old('pf_esi') }}" readonly>
                     <p class="doc-form__hint">If empty and CTC is set on salary structure, remainder after gross is used.</p>
                     @error('pf_esi')
                         <p class="doc-form-error">{{ $message }}</p>
@@ -96,4 +95,35 @@
             </div>
         </form>
     </section>
+    @push('external_scripts')
+    <script>
+        const employee_salary = @json($employees);
+        const allowance = @json($allowance_mapings); 
+
+        console.log(allowance);
+
+
+        document.getElementById('employee_id').addEventListener('change' , function(e){
+            e.preventDefault();
+            let id = e.target.value ; 
+            let employee_data = employee_salary.find(e => e.id == id ) ;
+
+            let ctc = employee_data.latest_salary_structure.ctc ; 
+            
+            let conveyance = eval(allowance.conveyance.replace('ctc' , ctc)); 
+            let vehicle_maintenance = eval(allowance.vehicle_maintenance.replace('ctc' , ctc)); 
+            let production_incentive = eval(allowance.production_incentive.replace('ctc' , ctc)); 
+            let pf_esi = eval(allowance.pf_esi.replace('ctc' , ctc)); 
+            let monthly_salary = Number.parseFloat(ctc / 12).toFixed(2); 
+
+            document.getElementById('compensation_line').value = ctc ;
+            document.getElementById('conveyance').value = conveyance ;
+            document.getElementById('production_incentive').value = production_incentive ;
+            document.getElementById('vehicle_maintenance').value = vehicle_maintenance ;
+            document.getElementById('pf_esi').value = pf_esi ;
+            document.getElementById('offered_salary').value = monthly_salary ; 
+
+        });
+    </script>
+    @endpush
 </x-layouts.app>

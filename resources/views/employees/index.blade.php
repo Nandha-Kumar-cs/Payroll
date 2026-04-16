@@ -4,7 +4,7 @@
     @endif
 
     <div class="doc-page-head">
-        <p>Directory with department and current salary (from <code>salary_structure</code>).</p>
+        <p>Directory with department and current salary .</p>
         <a class="doc-btn" href="{{ route('employees.create') }}">Add employee</a>
     </div>
 

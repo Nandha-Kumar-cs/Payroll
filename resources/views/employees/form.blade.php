@@ -147,9 +147,17 @@
 
             <div class="doc-form-grid">
                 <div>
-                    <label for="basic">Basic <span class="doc-req">*</span></label>
+                    <label for="ctc">CTC (annual) <span class="doc-req">*</span></label>
+                    <input id="ctc" name="ctc" type="number" step="0.01" min="0"
+                        value="{{ old('ctc', $salary->ctc) }}">
+                    @error('ctc')
+                        <p class="doc-form-error">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="basic">Basic</label>
                     <input id="basic" name="basic" type="number" step="0.01" min="0" required
-                        value="{{ old('basic', $salary->basic) }}">
+                        value="{{ old('basic', $salary->basic) }}" readonly>
                     @error('basic')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
@@ -157,7 +165,7 @@
                 <div>
                     <label for="hra">HRA</label>
                     <input id="hra" name="hra" type="number" step="0.01" min="0"
-                        value="{{ old('hra', $salary->hra) }}">
+                        value="{{ old('hra', $salary->hra) }}" readonly>
                     @error('hra')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
@@ -165,7 +173,7 @@
                 <div>
                     <label for="gross">Gross</label>
                     <input id="gross" name="gross" type="number" step="0.01" min="0"
-                        value="{{ old('gross', $salary->gross) }}" placeholder="Auto: basic + HRA">
+                        value="{{ old('gross', $salary->gross) }}" placeholder="Auto: basic + HRA" readonly>
                     @error('gross')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
@@ -173,19 +181,12 @@
                 <div>
                     <label for="net">Net</label>
                     <input id="net" name="net" type="number" step="0.01" min="0"
-                        value="{{ old('net', $salary->net) }}" placeholder="Auto: gross if empty">
+                        value="{{ old('net', $salary->net) }}" placeholder="Auto: gross if empty" readonly>
                     @error('net')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
                 </div>
-                <div>
-                    <label for="ctc">CTC (annual)</label>
-                    <input id="ctc" name="ctc" type="number" step="0.01" min="0"
-                        value="{{ old('ctc', $salary->ctc) }}">
-                    @error('ctc')
-                        <p class="doc-form-error">{{ $message }}</p>
-                    @enderror
-                </div>
+                
                 <div>
                     <label for="effective_from">Effective from <span class="doc-req">*</span></label>
                     <input id="effective_from" name="effective_from" type="date" required

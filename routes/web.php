@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Settings\AllowanceController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll.index');
     Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
     Route::get('/department' , [Department::class , 'index'])->name('department.index');
+
+    // all document routes
     Route::prefix('documents')->name('documents.')->group(function () {
         Route::get('/', [DocumentHubController::class, 'index'])->name('index');
 
@@ -72,6 +75,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/salary-slips/create', [SalarySlipController::class, 'create'])->name('salary-slips.create');
         Route::post('/salary-slips', [SalarySlipController::class, 'store'])->name('salary-slips.store');
         Route::get('/salary-slips/{salarySlip}/preview', [SalarySlipController::class, 'preview'])->name('salary-slips.preview');
+    });
+
+    // allowance routes
+    Route::prefix('allowance')->name('allowance.')->group(function(){
+        Route::post('/edit' , [AllowanceController::class , 'edit'])->name('edit');
     });
 
     Route::get('/home', function () {

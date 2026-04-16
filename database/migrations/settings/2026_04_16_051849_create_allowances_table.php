@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            if (! Schema::hasColumn('users', 'remember_token')) {
-                $table->rememberToken();
-            }
+        Schema::create('allowances', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
+            $table->string('value')->nullable;
+            $table->timestamps();
         });
     }
 
@@ -27,10 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            if (Schema::hasColumn('users', 'remember_token')) {
-                $table->dropColumn('remember_token');
-            }
-        });
+        Schema::dropIfExists('allowances');
     }
 };

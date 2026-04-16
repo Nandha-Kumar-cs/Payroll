@@ -11,9 +11,11 @@
                     <tr>
                         <th>Issued</th>
                         <th>Employee</th>
+                        <th>Employee Code</th>
                         <th>Department</th>
+                        <th>Designation</th>
                         <th>Offered salary</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="offer-letter-table">
@@ -21,10 +23,12 @@
                         <tr>
                             <td>{{ $row->issued_date?->format('Y-m-d') }}</td>
                             <td>{{ $row->employee?->full_name }}</td>
+                            <td>{{ $row->employee?->employee_code }}</td>
                             <td class="cell-muted">{{ $row->employee?->department?->name ?? '—' }}</td>
+                            <td class="cell-muted">{{ $row->employee?->designation?->title ?? '—' }}</td>
                             <td class="cell-muted">
-                                @if ($row->offered_salary !== null)
-                                    {{ number_format((float) $row->offered_salary, 2) }}
+                                @if ($row->employee?->latestSalaryStructure->ctc !== null)
+                                    {{ number_format((float) $row->employee?->latestSalaryStructure->ctc, 2) }}
                                 @else
                                     —
                                 @endif
@@ -32,6 +36,7 @@
                             <td>
                                 <a class="offer-letter-icons" href="{{ route('documents.offer-letters.preview', $row) }}"><i class="fa-solid fa-file-arrow-up "></i></a>
                                 <a class="offer-letter-icons" href="{{ route('documents.offer-letters.delete' , $row['id']) }}"><i class="fa-solid fa-trash"></i></a>
+                                <a class="offer-letter-icons" href="#"><i class="fa fa-envelope"></i></a>
                             </td>
                         </tr>
                     @empty

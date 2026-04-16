@@ -1,4 +1,4 @@
-<x-layouts.app title="HR Documents">
+<x-layouts.app title="Official Documents">
     <p class="doc-hub-intro">
         Generate professional letters and payslips for employees. After saving, open the preview and use
         <strong>Print / Save as PDF</strong> for a clean export. Company letterhead values come from
