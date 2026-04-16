@@ -1,58 +1,25 @@
-<x-layouts.document-print
+<x-layouts.document-print-single-page
     pageTitle="Appointment letter"
     :backUrl="route('documents.joining-letters.index')"
 >
     @include('documents.partials.letterhead', ['company' => $company])
 
-    <h2 class="doc-title">Letter of appointment</h2>
 
     <div class="doc-body">
+        <div class="doc-confirmation-letter">
+            
         <p class="doc-meta">
-            <strong>Date:</strong> {{ $letter->issued_date?->format('F j, Y') ?? now()->format('F j, Y') }}<br>
-            <strong>To:</strong> {{ $employee?->full_name }}<br>
-            @if ($employee?->email)
-                <strong>Email:</strong> {{ $employee->email }}
-            @endif
+            {{ $letter->issued_date?->format('F j, Y') ?? now()->format('F j, Y') }}<br>
         </p>
 
         <p>Dear {{ $employee?->full_name ?? 'Colleague' }},</p>
 
-        <p>
-            With reference to your application and subsequent discussions, we are pleased to appoint you to
-            @if ($employee?->designation?->title)
-                the position of <strong>{{ $employee->designation->title }}</strong>
-            @else
-                your assigned role
-            @endif
-            @if ($employee?->department?->name)
-                within the <strong>{{ $employee->department->name }}</strong> department
-            @endif
-            at <strong>{{ $company['name'] ?? 'the organization' }}</strong>.
-        </p>
-
-        <p>
-            Your date of joining / reporting shall be
-            <strong>{{ $letter->joining_date?->format('F j, Y') }}</strong>.
-            Please report to HR / your reporting manager on or before this date unless otherwise coordinated in writing.
-        </p>
-
-        <p>
-            Your employment shall be governed by the applicable policies, code of conduct, and employment terms in force
-            from time to time. Confidentiality, integrity, and compliance with statutory obligations are expected throughout
-            your tenure.
-        </p>
-
-        <p>
-            We welcome you to the team and look forward to your contributions.
-        </p>
-
-        <p>Yours faithfully,</p>
-
-        <div class="doc-signature">
-            <div class="doc-signature__line"></div>
-            <p class="doc-signature__name">Authorized Signatory</p>
-            <p class="doc-signature__role">Human Resources</p>
-            <p class="doc-signature__role">{{ $company['name'] ?? '' }}</p>
+        <p>Based on your performance, the management is pleased to inform you that you have been confirmed on the rolls of Magneto Dynamics w.e.f 12-Sep-2025. The salary remains the same as given in the offer letter at the time of joining.</p>
+        <p><br><br>For {{$company['name']}} 
+            </p><br><br>
+        <img src="{{asset('images/director_sign.png')}}" alt="" witdh=10 height=50>
+        <p>Suresh Kumar</p>
         </div>
     </div>
-</x-layouts.document-print>
+    @include('documents.partials.letterfooter')
+</x-layouts.document-print-single-page>
