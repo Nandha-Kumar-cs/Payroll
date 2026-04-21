@@ -32,8 +32,6 @@
         </div> -->
     </div>
 
-    <!-- allowance table -->
-    @include('dashboard.allowance')
     <br>
     <section class="app-panel">
         <h2 class="app-panel__head">Quick links</h2>
