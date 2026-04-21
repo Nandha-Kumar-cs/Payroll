@@ -5,11 +5,6 @@
 @endphp
 
 <x-layouts.app :title="$title">
-    <div class="doc-page-head">
-        <p>{{ $isEdit ? 'Update profile, department, and salary structure.' : 'Create an employee and their current salary structure.' }}</p>
-        <a class="doc-btn doc-btn--ghost" href="{{ route('employees.index') }}">Back to list</a>
-    </div>
-
     <section class="app-panel">
         <form class="doc-form doc-form--wide" method="POST" action="{{ $action }}">
             @csrf
@@ -102,8 +97,12 @@
                 </div>
                 <div>
                     <label for="status">Status</label>
-                    <input id="status" name="status" type="text" placeholder="e.g. Active, Probation"
-                        value="{{ old('status', $employee->status) }}">
+                    <select name="status" id="status">
+                        <option value="-1">—</option>
+                        <option value="1">Confirmed</option>
+                        <option value="2">probation</option>
+                        <option value="3">resigned</option>
+                    </select>
                     @error('status')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
@@ -141,57 +140,22 @@
             </div>
 
             <h3 class="doc-form-section-title">Salary structure</h3>
-            <p class="doc-form__hint" style="margin-bottom: 1rem;">
-                Mapped to <code>salary_structure</code>. Leave gross/net blank to use basic + HRA (gross) and same as net for now.
-            </p>
+
 
             <div class="doc-form-grid">
                 <div>
-                    <label for="ctc">CTC (annual) <span class="doc-req">*</span></label>
-                    <input id="ctc" name="ctc" type="number" step="0.01" min="0"
-                        value="{{ old('ctc', $salary->ctc) }}">
-                    @error('ctc')
+                    <label for="fixed">Fixed<span class="doc-req">*</span></label>
+                    <input id="fixed" name="fixed" type="number" step="0.01" min="0"
+                        value="{{ old('fixed', $salary->ctc) }}">
+                    @error('fixed')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
-                    <label for="basic">Basic</label>
-                    <input id="basic" name="basic" type="number" step="0.01" min="0" required
-                        value="{{ old('basic', $salary->basic) }}" readonly>
-                    @error('basic')
-                        <p class="doc-form-error">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
-                    <label for="hra">HRA</label>
-                    <input id="hra" name="hra" type="number" step="0.01" min="0"
-                        value="{{ old('hra', $salary->hra) }}" readonly>
-                    @error('hra')
-                        <p class="doc-form-error">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
-                    <label for="gross">Gross</label>
-                    <input id="gross" name="gross" type="number" step="0.01" min="0"
-                        value="{{ old('gross', $salary->gross) }}" placeholder="Auto: basic + HRA" readonly>
-                    @error('gross')
-                        <p class="doc-form-error">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
-                    <label for="net">Net</label>
-                    <input id="net" name="net" type="number" step="0.01" min="0"
-                        value="{{ old('net', $salary->net) }}" placeholder="Auto: gross if empty" readonly>
-                    @error('net')
-                        <p class="doc-form-error">{{ $message }}</p>
-                    @enderror
-                </div>
-                
-                <div>
-                    <label for="effective_from">Effective from <span class="doc-req">*</span></label>
-                    <input id="effective_from" name="effective_from" type="date" required
-                        value="{{ old('effective_from', $salary->effective_from?->format('Y-m-d') ?? now()->startOfMonth()->toDateString()) }}">
-                    @error('effective_from')
+                    <label for="variable">Variable<span class="doc-req">*</span></label>
+                    <input id="variable" name="variable" type="number" step="0.01" min="0" required
+                        value="{{ old('variable', $salary->basic) }}" >
+                    @error('variable')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
                 </div>

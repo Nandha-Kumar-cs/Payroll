@@ -67,7 +67,7 @@ class Employee extends Model
      */
     public function latestSalaryStructure(): HasOne
     {
-        return $this->hasOne(SalaryStructure::class, 'employee_id')->latestOfMany('effective_from');
+        return $this->hasOne(SalaryStructure::class, 'employee_id');
     }
 
     public function reportingManager(): BelongsTo

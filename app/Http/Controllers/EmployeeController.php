@@ -113,36 +113,23 @@ class EmployeeController extends Controller
             'dob' => ['nullable', 'date'],
             'gender' => ['nullable', 'in:M,F,O'],
             'phone' => ['required', 'integer'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => ['required', 'email', 'max:255' ,'unique:Employee,email'],
             'joining_date' => ['nullable', 'date'],
             'department_id' => ['nullable', 'exists:departments,id'],
-            'status' => ['nullable', 'string', 'max:100'],
+            'status' => ['integer', 'not_in:-1'],
             'designation_id' => ['nullable', 'exists:designations,id'],
             'probation_end_date' => ['nullable', 'date'],
             'reporting_manager_id' => ['nullable', 'exists:employee,id'],
         ];
 
         $validated = $request->validate(array_merge($employeeRules, [
-            'basic' => ['required', 'numeric', 'min:0'],
-            'hra' => ['nullable', 'numeric', 'min:0'],
-            'gross' => ['nullable', 'numeric', 'min:0'],
-            'net' => ['nullable', 'numeric', 'min:0'],
-            'ctc' => ['nullable', 'numeric', 'min:0'],
-            'effective_from' => ['required', 'date'],
+            'fixed' => ['numeric' , 'required'] ,
+            'variable' => ['numeric'  , 'required']
         ]));
 
         if (! empty($validated['reporting_manager_id']) && (int) $validated['reporting_manager_id'] === (int) ($request->route('employee')?->id)) {
             abort(422, 'Reporting manager cannot be the same employee.');
         }
-
-        $basic = (float) $validated['basic'];
-        $hra = (float) ($validated['hra'] ?? 0);
-        $gross = isset($validated['gross']) && $validated['gross'] !== '' && $validated['gross'] !== null
-            ? (float) $validated['gross']
-            : $basic + $hra;
-        $net = isset($validated['net']) && $validated['net'] !== '' && $validated['net'] !== null
-            ? (float) $validated['net']
-            : $gross;
 
         $employee = [
             'employee_code' => $validated['employee_code'],
@@ -160,12 +147,8 @@ class EmployeeController extends Controller
         ];
 
         $salary = [
-            'basic' => $basic,
-            'hra' => $hra,
-            'gross' => $gross,
-            'net' => $net,
-            'ctc' => isset($validated['ctc']) && $validated['ctc'] !== '' ? (float) $validated['ctc'] : null,
-            'effective_from' => $validated['effective_from'],
+            'ctc' => $validated['fixed'] ,
+            'variable' => $validated['variable']
         ];
 
         return ['employee' => $employee, 'salary' => $salary];

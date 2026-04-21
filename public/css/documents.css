@@ -64,7 +64,7 @@
 .doc-page-head p {
     margin: 0;
     font-size: 0.9375rem;
-    color: var(--muted);
+    color: black;
 }
 
 .doc-btn {
@@ -120,7 +120,7 @@
     font: inherit;
     font-size: 0.9375rem;
     color: var(--text);
-    background: var(--bg-elevated);
+    background: white;
     border: 1px solid var(--border);
     border-radius: 8px;
 }
@@ -176,10 +176,10 @@
 .doc-form-section-title {
     margin: 1.5rem 0 0.75rem;
     padding-bottom: 0.35rem;
-    border-bottom: 1px solid var(--border);
     font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: -0.01em;
+    color: black !important;
 }
 
 .doc-form-section-title:first-of-type {

@@ -5,8 +5,8 @@
     --bg: #0f1419;
     --bg-elevated: #161d27;
     --panel: #1a2332;
-    --border: rgba(255, 255, 255, 0.08);
-    --text: #e8edf4;
+    --border: black;
+    --text: black;
     --muted: #8b98a8;
     --accent: #3b82f6;
     --accent-soft: rgba(59, 130, 246, 0.15);
@@ -34,7 +34,6 @@
     display: flex;
     height: 100%;
 }
-
 
 .app-nav__link {
     display: flex;
@@ -66,8 +65,6 @@
     flex-shrink: 0;
     opacity: 0.9;
 }
-
-
 
 .app-content-wrap {
     flex: 1;
@@ -270,7 +267,6 @@ code {
         flex-direction: row;
         flex-wrap: wrap;
         padding-bottom: 0.5rem;
-        
     }
 
     .app-nav__link {
@@ -293,7 +289,7 @@ code {
 #offer-letter-table tr td i:first-child {
     margin-right: 5px;
 }
-.custom_buttons_display{
+.custom_buttons_display {
     display: flex;
     justify-content: space-between;
 }
@@ -301,21 +297,22 @@ code {
     display: block;
 }
 
-.fa-pen , .fa-trash {
+.fa-pen,
+.fa-trash {
     color: white;
     padding-right: 4px;
 }
-.app-layout{
-    display:block;
+.app-layout {
+    display: block;
 }
 
-.app-content-wrap{
-    width:100%;
-    margin-left:0;
-    padding-left:0;
+.app-content-wrap {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
     height: 92%;
 }
-.app-content-wrap{
+.app-content-wrap {
     height: 92%;
 }
 
@@ -323,7 +320,9 @@ code {
     height: inherit;
 }
 
-
-.app-nav{
-    height : 8% !important ;
+.app-nav {
+    height: 8% !important ;
+}
+.app-panel .doc-form label {
+    color: black;
 }
