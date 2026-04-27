@@ -60,6 +60,7 @@ table.dataTable thead td {
 .fa-icon {
     color: #212529;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .datatable-v1 .dropdown {
@@ -73,3 +74,10 @@ table.dataTable thead td {
 .datatable-v1 .dropdown-menu {
     right: 0 !important ;
 }
+/* .app-flash {
+    padding: 0.65rem 0.85rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+} */

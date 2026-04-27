@@ -25,7 +25,7 @@
                                 <td><input type="date" name="confirmation_date" id="confirmation_date"></td>
                             </tr>
                         </table>
-                        <input type="hidden" name="employee_id" id="fom_employee_id">
+                        <input type="hidden" name="employee_id" id="form_employee_id">
                        
                     </form>
                 </div>
@@ -71,7 +71,7 @@
             });
 
             function newJoiningLetter(id) {
-                document.getElementById('fom_employee_id').value = id;
+                document.getElementById('form_employee_id').value = id;
                 $('#joining_letter_modal').modal('show')
             }
 

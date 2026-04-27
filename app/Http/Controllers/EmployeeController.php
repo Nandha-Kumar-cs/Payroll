@@ -10,6 +10,7 @@ use App\Models\OfferLetter;
 use App\Models\SalaryStructure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -37,7 +38,7 @@ class EmployeeController extends Controller
             
             $joining_letter = JoiningLetter::query()->where('employee_id' , $employee->id)->first();
             
-            $joining_letter_link = $joining_letter ? '<a href="' .route('documents.joining-letters.preview' , $joining_letter) . '">Confirmation Letter</a>' : '<a href="#" onclick=newJoiningLetter("'.$employee->id.'")>Confirmation Letter</a>' ;
+            $joining_letter_link = $joining_letter ? '<a href="' .route('documents.joining-letters.preview' , $joining_letter) . '">Confirmation Letter</a>' : '<a type="button" href="#" onclick=newJoiningLetter("'.$employee->id.'")>Confirmation Letter</a>' ;
             
             
             return [
@@ -83,6 +84,7 @@ class EmployeeController extends Controller
             'designations' => Designation::query()->orderBy('title')->get(),
             'managers' => Employee::query()->orderBy('full_name')->get(),
             'mode' => 'create',
+            'probation_date' => Carbon::today()->addMonths(6)
         ]);
     }
 
@@ -112,6 +114,7 @@ class EmployeeController extends Controller
             'designations' => Designation::query()->orderBy('title')->get(),
             'managers' => Employee::query()->where('id', '!=', $employee->id)->orderBy('full_name')->get(),
             'mode' => 'edit',
+            'probation_date' => $employee->probation_end_date 
 
         ]);
     }
@@ -167,7 +170,7 @@ class EmployeeController extends Controller
         ];
 
         $validated = $request->validate(array_merge($employeeRules, [
-            'fixed' => ['numeric', 'required'],
+            'fixed' => ['required' ,'numeric'],
             'variable' => ['numeric', 'required']
         ]));
 

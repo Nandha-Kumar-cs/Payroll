@@ -87,6 +87,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/edit' , [AllowanceController::class , 'edit'])->name('edit');
         Route::get('/index' ,[AllowanceController::class , 'index'])->name('index');
         Route::get('/getData' ,[AllowanceController::class , 'getData'])->name('getData');
+        Route::delete('/delete/{id}' ,[AllowanceController::class , 'delete'])->name('delete');
+
+        
     });
 
     Route::get('/home', function () {

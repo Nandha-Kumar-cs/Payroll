@@ -68,7 +68,8 @@ class JoiningLetterController extends Controller
 
     public function store(Request $request) : RedirectResponse
     {
-        $employee = Employee::find($request->input('employee_id'))->first();
+        $employee_id = $request->input('employee_id') ; 
+        $employee = Employee::find($employee_id);
         $confirm_date = $request->input('confirmation_date') ; 
         $letter = JoiningLetter::query()->create([
             'employee_id' => $employee->id,

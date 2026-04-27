@@ -3,71 +3,71 @@
         <link rel="stylesheet" href="{{ asset('css/components/table_dropdown.css') }}">
         <link rel="stylesheet" href="{{ asset('css/table.css') }}">
     @endpush()
+    <!-- edit modal -->
+    <!-- <div class="app-flash" role="status">{{ session('success') }}</div> -->
+    <x-bootstrap.modal id="edit_modal" modeltitle="Edit Allowance" submitbutton="Save Changes"
+        submitbuttonid="submitbutton">
+        <form id="edit_modal_form" action="{{ route('allowance.edit') }}" method="POST">
+            @csrf
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <input type="text" name="type" id="edit_type">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>
+                        <input type="text" name="new_value" id="edit_value">
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="edit_id" id="edit_id">
+        </form>
+    </x-bootstrap.modal>
+
+
     <section class="table-panel" style="padding:0; margin:0;">
         <div class="table-responsive" style="width:100%; margin:0; padding:0;">
             <x-data_table :headers="[
         'id',
         'type',
         'value',
-    ]" id="allowance_table" pagetitle="Allowance List"
-                ajax="allowance.getData" />
+        'Actions',
+    ]" id="allowance_table"
+                pagetitle="Allowance List" ajax="allowance.getData" />
         </div>
     </section>
 
     @push('external_scripts')
         <script>
-            let allowance_rows = document.querySelectorAll('#allowance_table tbody tr  td:nth-child(2)');
-            Array.from(allowance_rows).forEach(function (row) {
-                row.addEventListener('dblclick', function (e) {
-                    alert('working');
-                    let existing_value = e.target.textContent;
-                    let name = e.target.className;
+            function deleteAllowance(id) {
+                let url = '{{ route("allowance.delete", ":id") }}'
+                url = url.replace(":id", id);
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                }).then(response => response.json()).then(result => {
+                    if (result.success) {
+                        Swal.fire("success", "Allowance Deleted");
+                    }
+                    $('#allowance_table').DataTable().ajax.reload();
+                });
+            }
 
-                    // creating form when doublic click event occurs 
-                    let form = document.createElement('form');
-                    form.action = "{{ route('allowance.edit') }}";
-                    form.method = "POST";
+            function editAllowance(id, name, value) {
+                $('#edit_type').val(name);
+                $('#edit_value').val(value);
+                $('#edit_id').val(id);
+                $('#edit_modal').modal('show');
+            }
 
-                    // creatin input box to append
-                    let input1 = document.createElement('input');
-                    input1.type = "text";
-                    input1.name = 'new_value';
-                    input1.value = existing_value;
-
-                    // type 
-                    let input2 = document.createElement('input');
-                    input2.type = "hidden";
-                    input2.name = 'name';
-                    input2.value = name;
-
-                    // id of the allowance 
-                    let input3 = document.createElement('input');
-                    input3.type = "hidden";
-                    input3.name = 'id';
-                    input3.value = e.target.dataset.id;
-
-                    // csrf token 
-                    let csrf = document.createElement('input');
-                    csrf.type = 'hidden';
-                    csrf.name = "_token";
-                    csrf.value = document.querySelector('meta[name="csrf-token"]').content;
-
-                    // adding event listner for the input1 to make a ajax call 
-                    input1.addEventListener('blur', function (t) {
-                        let new_value = t.target.value;
-                        if (new_value == existing_value) {
-                            e.target.innerHTML = existing_value;
-                        }
-                        else {
-                            form.submit();
-                        }
-                    })
-
-                    form.append(input1, input2, csrf, input3);
-                    e.target.innerHTML = '';
-                    e.target.appendChild(form);
-                    input1.focus();
-                })
+            document.getElementById('submitbutton').addEventListener('click', function (e) {
+                document.getElementById('edit_modal_form').submit();
             });
         </script>
     @endpush

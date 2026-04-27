@@ -3,7 +3,6 @@
     $title = $isEdit ? 'Edit employee' : 'Add employee';
     $action = $isEdit ? route('employees.update', $employee) : route('employees.store');
 @endphp
-
 <x-layouts.app :title="$title">
     <div class=" d-flex justify-content-between mt-4 ms-3 me-3">
         <h3 class="doc-form-section-title">Employee details</h3>
@@ -119,7 +118,7 @@
                 <div>
                     <label for="probation_end_date">Probation end</label>
                     <input id="probation_end_date" name="probation_end_date" type="date"
-                        value="{{ old('probation_end_date', $employee->probation_end_date?->format('Y-m-d')) }}">
+                        value="{{  old('probation_end_date' , $probation_date->format('Y-m-d')) }}" readonly>
                     @error('probation_end_date')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror

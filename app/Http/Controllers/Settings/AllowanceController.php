@@ -16,11 +16,11 @@ class AllowanceController extends Controller
     }
     public function edit(Request $request)
     {
-        $id = $request->input('id');
+        $id = $request->input('edit_id');
         $allowance = Allowance::find($id);
-        $column_name = $request->input('name');
         $allowance->update([
-            $column_name => $request->input('new_value')
+            'value' => $request->input('new_value') , 
+            'type' => $request->input('type') , 
         ]);
         return redirect()->back()->with('success', 'Allowance Updated SuccessFully !');
     }
@@ -31,11 +31,23 @@ class AllowanceController extends Controller
             return [
                 $row->id,
                 $row->type,
-                $row->value
+                $row->value,
+                '
+                <a onclick="editAllowance('.$row->id.' , `'.$row->type.'`, `'.$row->value.'`)"><i class="fa fa-edit fa-icon"></i></a>
+                <a onclick=deleteAllowance(' . $row->id . ')><i class="fa fa-trash fa-icon"></i></a>
+                '
             ];
         });
-        return DataTables::of($data)->make(true);
+        return DataTables::of($data)
+            ->rawColumns([3])
+            ->make(true);
     }
 
-
+    public function delete($id)
+    {
+        Allowance::find($id)->delete();
+        return response()->json([
+            'success' => true,
+        ]);
+    }
 }
