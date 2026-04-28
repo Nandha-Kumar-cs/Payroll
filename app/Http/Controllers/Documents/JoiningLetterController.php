@@ -70,6 +70,9 @@ class JoiningLetterController extends Controller
     {
         $employee_id = $request->input('employee_id') ; 
         $employee = Employee::find($employee_id);
+        $employee->update([
+            'status' => 'Confirmed' 
+        ]);
         $confirm_date = $request->input('confirmation_date') ; 
         $letter = JoiningLetter::query()->create([
             'employee_id' => $employee->id,
@@ -99,8 +102,11 @@ class JoiningLetterController extends Controller
     {
         try {
             // Delete the record from the database
+            // $joiningLetter->employee->update([
+            //     'status' => ''
+            // ]);
             $joiningLetter->delete();
-
+            
             return redirect()->back()->with('success', 'Joining letter deleted successfully.');
         } catch (\Exception $e) {
             // Handle cases where deletion might fail (e.g. database constraints)

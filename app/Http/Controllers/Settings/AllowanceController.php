@@ -14,6 +14,14 @@ class AllowanceController extends Controller
     {
         return view('pages.allowance.index');
     }
+    public function add(Request $request){
+        $data = $request->validate([
+            'type' => 'required' ,
+            'value' => 'required'
+        ]);
+        Allowance::create($data);
+        
+    }
     public function edit(Request $request)
     {
         $id = $request->input('edit_id');

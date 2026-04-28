@@ -3,8 +3,8 @@
         <link rel="stylesheet" href="{{ asset('css/components/table_dropdown.css') }}">
         <link rel="stylesheet" href="{{ asset('css/table.css') }}">
     @endpush()
-    <!-- edit modal -->
     <!-- <div class="app-flash" role="status">{{ session('success') }}</div> -->
+    <!-- edit modal -->
     <x-bootstrap.modal id="edit_modal" modeltitle="Edit Allowance" submitbutton="Save Changes"
         submitbuttonid="submitbutton">
         <form id="edit_modal_form" action="{{ route('allowance.edit') }}" method="POST">
@@ -24,6 +24,28 @@
                 </tr>
             </table>
             <input type="hidden" name="edit_id" id="edit_id">
+        </form>
+    </x-bootstrap.modal>
+
+    <!-- add modal -->
+    <x-bootstrap.modal id="add_modal" modeltitle="Add Allowance" submitbutton="Add"
+        submitbuttonid="addButton">
+        <form id="add_modal_form" action="{{ route('allowance.add') }}" method="POST">
+            @csrf
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <input type="text" name="type">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>
+                        <input type="text" name="value">
+                    </td>
+                </tr>
+            </table>
         </form>
     </x-bootstrap.modal>
 
@@ -69,6 +91,26 @@
             document.getElementById('submitbutton').addEventListener('click', function (e) {
                 document.getElementById('edit_modal_form').submit();
             });
+
+            document.getElementById('addButton').addEventListener('click', function (e) {
+                document.getElementById('add_modal_form').submit();
+            });
+
+            $(document).on('table-ready', function (e, table) {
+                let button = $('<button>', {
+                    text: 'Add Allowance',
+                    click: function () {
+                        $('#add_modal').modal('show');
+                    }
+                }).css({
+                    width: '110px',
+                    border: '1px solid grey',
+                    position: 'relative',
+                    marginTop: '5%',
+                    marginLeft: '10%'
+                });
+                $('.dt-buttons').append(button);
+            }); 
         </script>
     @endpush
 </x-layouts.app>
