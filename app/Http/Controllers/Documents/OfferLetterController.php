@@ -32,7 +32,7 @@ class OfferLetterController extends Controller
             return [
                 $letter->employee->employee_code,
                 $letter->employee->full_name,
-                $letter->employee->department->name,
+                $letter->employee->department?->name,
                 $letter->employee->designation->title,
                 $letter->employee->salary->ctc,
                 $letter->employee->salary->variable,

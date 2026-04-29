@@ -20,6 +20,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dropdown.css') }}">
@@ -34,16 +35,6 @@
             </main>
         </div>
     </div>
-    <script>
-     document.addEventListener('DOMContentLoaded' , function(e){
-        const flash = document.querySelector('.app-flash') ; 
-        if(flash){
-            setTimeout(function(){
-               flash.style.display = 'none' ; 
-            } , 1000);
-        } 
-     });
-    </script>
     @stack('external_scripts')
 </body>
 </html>

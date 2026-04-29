@@ -1,0 +1,73 @@
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 1.5rem;
+}
+
+.settings-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+}
+
+.settings-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.settings-card__title {
+    margin: 0;
+
+    font-weight: 600;
+    color: #111827;
+}
+
+.settings-card__subtitle {
+    margin: 0.25rem 0 0;
+    color: #6b7280;
+}
+
+.settings-form-table {
+    width: 100%;
+}
+
+.settings-form-table td {
+    padding: 0.45rem 0.35rem;
+    vertical-align: middle;
+}
+
+.settings-form-table input,
+.settings-form-table select {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+.dataTables_info {
+    font-size: 12px !important;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 2px 8px !important;
+    font-size: 12px !important;
+    margin: 0 2px;
+}
+table.dataTable {
+    table-layout: fixed;
+}
+
+table.dataTable tr td,
+tr th {
+    border: none !important;
+}
+table.dataTable thead th,
+table.dataTable thead td ,
+table.dataTable tbody td {
+    border-bottom: 1px solid #dee2e6 !important;
+    font-size: 12px ;
+}
