@@ -132,14 +132,20 @@ class Department extends Controller
     }
 
 
-    public function deleteDepartment($id)
+    public function deleteDepartment(int $id)
     {
         DepartmentModel::find($id)->delete();
         return back()->with(['success' => 'Department Deleted SuccessFully !']);
     }
 
-    function deleteDesignation($id) {
+    function deleteDesignation(int $id) {
         Designation::find($id)->delete() ;
         return back()->with(['success' => 'Designation Deleted SuccessFully !']);
+    }
+
+    public function getDesignation (int $id) {
+        
+        $data =  Designation::query()->where('department' , $id)->select('title' , 'id')->get() ;
+        return json_encode($data);
     }
 }

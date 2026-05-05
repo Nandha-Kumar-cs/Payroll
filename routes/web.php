@@ -102,6 +102,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/designations/edit', [Department::class, 'editDesignation'])->name('designations.edit');
         Route::get('/department/delete/{id}', [Department::class, 'deleteDepartment'])->name('department.delete');
         Route::get('/designation/delete/{id}', [Department::class, 'deleteDesignation'])->name('designation.delete');
+        Route::get('/designation/{id}', [Department::class, 'getDesignation'])->name('designation.getDesignation');
     });
 
     Route::get('/home', function () {

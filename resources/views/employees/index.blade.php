@@ -43,6 +43,7 @@
         'code',
         'Name',
         'Email',
+        'Phone',
         'Department',
         'Designation',
         'CTC',

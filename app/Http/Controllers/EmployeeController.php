@@ -11,6 +11,7 @@ use App\Models\SalaryStructure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rules\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -45,6 +46,7 @@ class EmployeeController extends Controller
                 $employee->employee_code,
                 $employee->full_name,
                 $employee->email,
+                $employee->phone,
                 $employee?->department?->name,
                 $employee?->designation?->title,
                 $employee?->salary?->ctc,
@@ -71,7 +73,7 @@ class EmployeeController extends Controller
         });
 
         return DataTables::of($data)
-            ->rawColumns([8])
+            ->rawColumns([9])
             ->make(true);
     }
 
@@ -81,7 +83,6 @@ class EmployeeController extends Controller
             'employee' => new Employee,
             'salary' => new SalaryStructure(['effective_from' => now()->startOfMonth()->toDateString()]),
             'departments' => Department::query()->orderBy('name')->get(),
-            'designations' => Designation::query()->orderBy('title')->get(),
             'managers' => Employee::query()->orderBy('full_name')->get(),
             'mode' => 'create',
             'probation_date' => Carbon::today()->addMonths(6)
@@ -157,7 +158,7 @@ class EmployeeController extends Controller
         $employeeRules = [
             'employee_code' => ['required', 'string', 'max:191', $codeRule],
             'full_name' => ['required', 'string', 'max:255'],
-            'dob' => ['nullable', 'date'],
+            'dob' => ['nullable', 'date' , 'before_or_equal:'.Carbon::today()->subYears(18)->format('Y-m-d')],
             'gender' => ['nullable', 'in:M,F,O'],
             'phone' => ['required', 'integer'],
             'email' => ['required', 'email', 'max:255'],
@@ -172,7 +173,9 @@ class EmployeeController extends Controller
         $validated = $request->validate(array_merge($employeeRules, [
             'fixed' => ['required' ,'numeric'],
             'variable' => ['numeric', 'required']
-        ]));
+        ]) , [
+            'dob' => 'Applicants must be 18 years of age or older.'
+        ]);
 
         if (!empty($validated['reporting_manager_id']) && (int) $validated['reporting_manager_id'] === (int) ($request->route('employee')?->id))
         {
@@ -201,8 +204,5 @@ class EmployeeController extends Controller
 
         return ['employee' => $employee, 'salary' => $salary];
     }
-
-
-
 
 }

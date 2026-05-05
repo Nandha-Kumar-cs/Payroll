@@ -82,11 +82,6 @@
                     <label for="designation_id">Designation</label>
                     <select id="designation_id" name="designation_id">
                         <option value="">— Select —</option>
-                        @foreach ($designations as $d)
-                            <option value="{{ $d->id }}" @selected((string) old('designation_id', $employee->designation_id) === (string) $d->id)>
-                                {{ $d->title }}
-                            </option>
-                        @endforeach
                     </select>
                     @error('designation_id')
                         <p class="doc-form-error">{{ $message }}</p>
@@ -118,7 +113,7 @@
                 <div>
                     <label for="probation_end_date">Probation end</label>
                     <input id="probation_end_date" name="probation_end_date" type="date"
-                        value="{{  old('probation_end_date' , $probation_date->format('Y-m-d')) }}" readonly>
+                        value="{{  old('probation_end_date', $probation_date->format('Y-m-d')) }}" readonly>
                     @error('probation_end_date')
                         <p class="doc-form-error">{{ $message }}</p>
                     @enderror
@@ -166,4 +161,25 @@
             </div>
         </form>
     </section>
+
+    @push('external_scripts')
+        <script>
+            document.getElementById('department_id').addEventListener('change', function (e) {
+                let url = '{{ route("department.designation.getDesignation", ":id") }}';
+                url = url.replace(':id', e.target.value);
+                fetch(url, {
+                    method: 'GET',
+                    headers : {
+                        'content-type' : 'application/json'
+                    },
+                }).then(result => result.json()).then(data => {
+                        let options = '';
+                        data.forEach(element => {
+                            options += '<option value='+element.id+'>'+element.title+'</option>'
+                        });
+                        document.getElementById('designation_id').innerHTML = options;
+                });
+            })
+        </script>
+    @endpush
 </x-layouts.app>
